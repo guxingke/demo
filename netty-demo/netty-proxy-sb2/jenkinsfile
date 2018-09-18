@@ -1,0 +1,51 @@
+#!/usr/bin/env groovy
+node {
+  try {
+    parallel (
+        checkout: {
+          stage('Checkout'){
+            checkout scm
+          }
+        },
+        init:{
+          stage('Initialize') {
+            echo 'Initializing...'
+          }
+        }
+    )
+
+    stage('Clean') {
+      sh 'make clean'
+    }
+
+    parallel (
+        test: {
+          stage('Testing') {
+            echo 'make test'
+          }
+        },
+        package:{
+          stage('Package') {
+            sh 'make build'
+          }
+        }
+    )
+
+    stage('Package') {
+      sh 'make package'
+      sh 'make package_conf'
+    }
+
+    stage('Deploy') {
+      sh 'make deploy'
+      sh 'make deploy_docker'
+    }
+
+ } catch (e) {
+    currentBuild.result = "FAILURE"
+    throw e
+  } finally {
+    echo 'notification to .....'
+    echo 'final'
+  }
+}

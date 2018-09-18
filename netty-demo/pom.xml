@@ -11,6 +11,7 @@
   <modules>
     <module>netty-echo</module>
     <module>netty-proxy</module>
+    <module>netty-proxy-sb2</module>
   </modules>
 
   <name>netty-demo</name>
