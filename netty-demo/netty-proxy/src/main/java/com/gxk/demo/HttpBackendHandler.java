@@ -6,6 +6,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
+import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.util.ReferenceCountUtil;
 
@@ -14,11 +15,31 @@ import java.nio.charset.Charset;
 public class HttpBackendHandler extends ChannelInboundHandlerAdapter {
 
   private final Channel clientChannel;
+  private final FullHttpRequest request;
+
+  private AbstractResponseInterptor responseInterptor;
 
   private String fakeContent = "{\"data\": {\"apps\": [\"onepiece\", \"buy-onepiece\", \"vienna-op\", \"mamor\", \"legolas\", \"athena-op\", \"sakura-op\", \"mandala\", \"garuda\", \"terrier\", \"mugger\", \"saturn\", \"tritonis\", \"panama\", \"osgw\", \"dt-notify\", \"munich\", \"buy\", \"japa\", \"vienna\", \"doctor\", \"buy-admin\", \"paris\", \"dva\", \"operator\", \"nginx\"]}}";
 
-  public HttpBackendHandler(Channel clientChannel) {
+  public HttpBackendHandler(Channel clientChannel, FullHttpRequest request) {
     this.clientChannel = clientChannel;
+    this.request = request;
+
+    responseInterptor = new AbstractResponseInterptor() {
+      @Override
+      public void afterResponse(Channel fe, Channel be, FullHttpRequest request, FullHttpResponse response) {
+        System.out.println("after response");
+
+        response.headers().add("test", "gxk");
+
+        ReferenceCountUtil.release(response);
+
+        // replace response content
+        ByteBuf byteBuf = ByteBufAllocator.DEFAULT.buffer().writeBytes(fakeContent.getBytes());
+        DefaultFullHttpResponse fullHttpResponse = new DefaultFullHttpResponse(response.protocolVersion(), response.status(), byteBuf);
+        fe.writeAndFlush(fullHttpResponse);
+      }
+    };
   }
 
   @Override
@@ -28,24 +49,16 @@ public class HttpBackendHandler extends ChannelInboundHandlerAdapter {
       ReferenceCountUtil.release(msg);
       return;
     }
-    if (msg instanceof FullHttpResponse) {
 
-      // interceptor
-      FullHttpResponse response = (FullHttpResponse) msg;
-      response.headers().add("test", "gxk");
-      String content = response.content().toString(Charset.forName("UTF-8"));
-      System.out.println(content);
-
+    if (!(msg instanceof FullHttpResponse)) {
       ReferenceCountUtil.release(msg);
-
-      // replace response content
-      ByteBuf byteBuf = ByteBufAllocator.DEFAULT.buffer().writeBytes(fakeContent.getBytes());
-      DefaultFullHttpResponse fullHttpResponse = new DefaultFullHttpResponse(response.protocolVersion(), response.status(), byteBuf);
-      clientChannel.writeAndFlush(fullHttpResponse);
-    } else {
-      System.out.println(msg.getClass());
-      clientChannel.writeAndFlush(msg);
+      return;
     }
+
+    FullHttpResponse response = (FullHttpResponse) msg;
+
+    // interceptor
+    responseInterptor.afterResponse(clientChannel, ctx.channel(), request, response);
   }
 
   @Override
