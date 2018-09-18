@@ -6,7 +6,7 @@
   <parent>
     <groupId>com.gxk.demo</groupId>
     <artifactId>netty-demo</artifactId>
-    <version>180912.1033</version>
+    <version>180822.1033</version>
     <relativePath>../</relativePath>
   </parent>
 
@@ -20,6 +20,10 @@
     <dependency>
       <groupId>io.netty</groupId>
       <artifactId>netty-all</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
     </dependency>
   </dependencies>
 </project>

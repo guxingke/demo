@@ -1,4 +1,4 @@
-package com.gxk.demo;
+package com.gxk.demo.frontend;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
