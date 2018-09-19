@@ -4,6 +4,7 @@ import com.guxingke.demo.biz.proxy.bootstarp.HttpProxyConfig;
 import com.guxingke.demo.biz.proxy.bootstarp.HttpProxyServer;
 import com.guxingke.demo.biz.proxy.bootstarp.ProxyConfigHolder;
 import com.guxingke.demo.biz.proxy.filter.Filter;
+import com.guxingke.demo.biz.proxy.filter.FilterRegistration;
 import com.guxingke.demo.biz.proxy.filter.RequestFilter;
 import com.guxingke.demo.biz.proxy.filter.ResponseFilter;
 import io.netty.buffer.ByteBuf;
@@ -22,10 +23,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.core.annotation.Order;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Configuration
 @ComponentScan
@@ -50,16 +56,58 @@ public class ProxyConfig implements ApplicationListener {
       ProxyConfigHolder.setConfig(config);
 
       ApplicationContext context = ((ContextRefreshedEvent) event).getApplicationContext();
-      Map<String, Filter> beansOfType = context.getBeansOfType(Filter.class);
+      Map<String, FilterRegistration> beansOfType = context.getBeansOfType(FilterRegistration.class);
       System.out.println(beansOfType.size());
 
-      Collection<Filter> filters = beansOfType.values();
+      Collection<FilterRegistration> registrations = beansOfType.values();
+
+      List<FilterRegistration> list = new ArrayList<>(registrations);
+      list.sort(Comparator.comparing(FilterRegistration::getOrder));
+      List<Filter> filters = list.stream()
+        .map(FilterRegistration::getFilter)
+        .collect(Collectors.toList());
 
       HttpProxyServer.builder()
-        .filters(new ArrayList<>(filters))
+        .filters(filters)
         .build()
         .start();
     }
+  }
+
+  @Bean
+  public FilterRegistration filterRegistration() {
+    return FilterRegistration.builder()
+      .filter(beforeRequest())
+      .order(Integer.MIN_VALUE)
+      .path("/*")
+      .build();
+  }
+
+  @Bean
+  public FilterRegistration filterRegistration3() {
+    return FilterRegistration.builder()
+      .filter(beforeRequest2())
+      .order(Integer.MIN_VALUE + 1)
+      .path("/*")
+      .build();
+  }
+
+  @Bean
+  public FilterRegistration filterRegistration2() {
+    return FilterRegistration.builder()
+      .filter(afterResponse())
+      .order(Integer.MAX_VALUE)
+      .path("/*")
+      .build();
+  }
+
+  @Bean
+  public FilterRegistration filterRegistration4() {
+    return FilterRegistration.builder()
+      .filter(afterResponse2())
+      .order(Integer.MAX_VALUE - 1)
+      .path("/*")
+      .build();
   }
 
   @Bean
@@ -81,9 +129,19 @@ public class ProxyConfig implements ApplicationListener {
   }
 
   @Bean
+  public Filter beforeRequest2() {
+    return new RequestFilter((request, response) -> {
+      // do something
+      System.out.println("before request2");
+      FullHttpRequest req = request.getRequest();
+      req.headers().add("test", "req gxk");
+    });
+  }
+
+  @Bean
   public Filter afterResponse() {
     return new ResponseFilter((request, response) -> {
-      System.out.println("after response2");
+      System.out.println("after response");
       FullHttpResponse resp = response.getResponse();
 
       resp.headers().add("test", "gxk");
@@ -99,6 +157,20 @@ public class ProxyConfig implements ApplicationListener {
 
       ReferenceCountUtil.release(resp);
       request.writeAndFlush(fullHttpResponse);
+    });
+  }
+
+  @Bean
+  public Filter afterResponse2() {
+    return new ResponseFilter((request, response) -> {
+      System.out.println("after response2");
+      FullHttpResponse resp = response.getResponse();
+
+      resp.headers().add("test1", "gxk2");
+
+      if (request.getRequest().uri().endsWith("envs/")) {
+        return;
+      }
     });
   }
 }
