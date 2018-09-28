@@ -28,6 +28,7 @@
 
   <modules>
     <module>sb-web-flux</module>
+    <module>sb-security</module>
   </modules>
 
   <build>

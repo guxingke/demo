@@ -3,10 +3,13 @@ package com.gxk.demo.sbwebflux;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.publisher.MonoSink;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Consumer;
 
 @Slf4j
 public class FluxTest {
@@ -70,5 +73,27 @@ public class FluxTest {
       .map(i -> "value " + i);
 
     new Thread(() -> flux.subscribe(System.out::println));
+  }
+
+  @Test
+  public void testMono() {
+    Mono.<Void>fromCallable(() -> {
+      throw new RuntimeException("xxx");
+    }).doOnError(it -> System.out.println(it))
+      .doOnSuccessOrError((s, e) -> System.out.println(e))
+      .subscribe();
+  }
+
+  @Test
+  public void testMono2() {
+    Mono.<Void>fromRunnable(() -> {
+//      throw new RuntimeException("xxx");
+    }).doOnError(it -> System.out.println(it))
+      .doOnSuccessOrError((s, e) -> {
+        System.out.println("e " + e);
+        System.out.println("s " + s);
+      })
+      .then(Mono.just("xxxx"))
+      .subscribe(it -> System.out.println("sub " + it));
   }
 }
