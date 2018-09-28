@@ -27,10 +27,16 @@ public class DecideManager {
       return false;
     },
     (HttpServletRequest request, User user) -> {
-      if (request.getRequestURI().endsWith("login")) {
-        return true;
-      }
-      return false;
+      String uri = request.getRequestURI();
+
+      // permitAll
+      List<String> permitAll = Arrays.asList(
+        "/",
+        "/login",
+        "/favicon.ico"
+      );
+
+      return permitAll.contains(uri);
     }
   );
 
