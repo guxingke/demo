@@ -12,16 +12,17 @@ cd demo/sb-demo/sb-simple-security
 mvn spring-boot:run
 
 ```
-open url
 
-http://localhost:8080
+## TEST open url
 
-http://localhost:8080/hello
-http://localhost:8080/hello?username=test
-http://localhost:8080/hello?username=admin
+- http://localhost:8080
 
-http://localhost:8080/home
-http://localhost:8080/home?username=test
-http://localhost:8080/home?username=admin
+- http://localhost:8080/hello
+- http://localhost:8080/hello?username=test
+- http://localhost:8080/hello?username=admin
+
+- http://localhost:8080/home
+- http://localhost:8080/home?username=test
+- http://localhost:8080/home?username=admin
 
 
