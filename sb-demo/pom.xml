@@ -30,6 +30,7 @@
     <module>sb-web-flux</module>
     <module>sb-security</module>
     <module>sb-simple-security</module>
+    <module>sb-config</module>
   </modules>
 
   <build>
