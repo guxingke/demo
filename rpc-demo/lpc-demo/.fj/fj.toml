@@ -1,0 +1,7 @@
+package = "com.gxk.demo"
+author = "gxk"
+name = "lpc-demo"
+
+[info]
+version = "0.0.1"
+desc = "todo"
