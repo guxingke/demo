@@ -1,7 +1,7 @@
 package com.gxk.demo.boot;
 
-import com.gxk.demo.service.WorldService;
-import com.gxk.demo.service.WorldServiceImpl;
+import com.gxk.demo.service.HelloService;
+import com.gxk.demo.service.HelloServiceImpl;
 import java.io.IOException;
 import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ProtocolConfig;
@@ -9,31 +9,27 @@ import org.apache.dubbo.config.ReferenceConfig;
 import org.apache.dubbo.config.RegistryConfig;
 import org.apache.dubbo.config.ServiceConfig;
 
-/**
- * 接口服务继承.
- */
-public class Server2App {
-
+public class ServerWithInjvmRegistryApp {
   public static void main(String[] args) throws IOException {
-    ServiceConfig<WorldServiceImpl> service = new ServiceConfig<>();
+    ServiceConfig<HelloServiceImpl> service = new ServiceConfig<>();
 
-    ApplicationConfig application = new ApplicationConfig("dubbo-demo-api-provider");
+    ApplicationConfig application = new ApplicationConfig("dubbo-demo-api-provider3");
     application.setQosEnable(false);
     service.setApplication(application);
 
-    RegistryConfig registry = new RegistryConfig("multicast://224.5.6.7:1234");
+    RegistryConfig registry = new RegistryConfig("injvm://127.0.0.1");
     registry.setCheck(false);
     service.setRegistry(registry);
 
     service.setProtocol(new ProtocolConfig("injvm"));
 
-    service.setInterface(WorldService.class);
-    service.setRef(new WorldServiceImpl());
+    service.setInterface(HelloService.class);
+    service.setRef(new HelloServiceImpl());
     service.export();
 
-    ReferenceConfig<WorldService> reference = new ReferenceConfig<>();
-    reference.setInterface(WorldService.class);
-    WorldService service2 = reference.get();
+    ReferenceConfig<HelloService> reference = new ReferenceConfig<>();
+    reference.setInterface(HelloService.class);
+    HelloService service2 = reference.get();
     String message = service2.hello("dubbo");
     System.out.println(message);
   }
