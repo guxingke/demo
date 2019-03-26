@@ -1,26 +1,22 @@
 package com.gxk.demo.example.client;
 
 import com.gxk.demo.example.core.HelloService;
-import com.gxk.demo.example.route.Dispatcher;
+import com.gxk.demo.example.register.LocalRegistry;
 
 public class HelloServiceProxy implements HelloService {
+  HelloService helloService;
 
-  private final Dispatcher dispatcher;
-
-  public HelloServiceProxy(Dispatcher dispatcher) {
-    this.dispatcher = dispatcher;
+  public HelloServiceProxy() {
+    helloService = (HelloService) LocalRegistry.getInstance().get(HelloService.class);
   }
 
   @Override
   public void hello(String msg) {
-    Class<?> inter = this.getClass().getInterfaces()[0];
-    dispatcher.invoke(inter, "hello", msg);
+    helloService.hello(msg);
   }
 
   @Override
   public String format(String format, String name) {
-    Class<?> inter = this.getClass().getInterfaces()[0];
-    Object ret = dispatcher.invoke(inter, "format", format, name);
-    return (String) ret;
+    return helloService.format(format, name);
   }
 }
