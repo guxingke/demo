@@ -1,4 +1,4 @@
-package com.gxk.demo.example.proxy;
+package com.gxk.demo.dynamicproxy.proxy;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

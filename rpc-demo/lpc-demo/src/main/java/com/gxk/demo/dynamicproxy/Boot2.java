@@ -1,10 +1,10 @@
-package com.gxk.demo.example;
+package com.gxk.demo.dynamicproxy;
 
 import com.gxk.demo.example.core.HelloService;
 import com.gxk.demo.example.core.HelloServiceImpl;
-import com.gxk.demo.example.proxy.ConsumerInvocationHandler;
-import com.gxk.demo.example.proxy.ProviderInvocationHandler;
-import com.gxk.demo.example.register.LocalRegistry;
+import com.gxk.demo.dynamicproxy.proxy.ConsumerInvocationHandler;
+import com.gxk.demo.dynamicproxy.proxy.ProviderInvocationHandler;
+import com.gxk.demo.register.LocalRegistry;
 
 import java.lang.reflect.Proxy;
 

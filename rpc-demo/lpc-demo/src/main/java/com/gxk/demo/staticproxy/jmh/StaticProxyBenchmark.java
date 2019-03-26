@@ -1,8 +1,8 @@
-package com.gxk.demo.jmh;
+package com.gxk.demo.staticproxy.jmh;
 
 import com.gxk.demo.example.core.HelloService;
 import com.gxk.demo.example.core.HelloServiceImpl;
-import com.gxk.demo.example.register.LocalRegistry;
+import com.gxk.demo.register.LocalRegistry;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Measurement;
@@ -26,12 +26,12 @@ import java.util.concurrent.TimeUnit;
 @State(Scope.Benchmark)
 public class StaticProxyBenchmark {
 
-  com.gxk.demo.example.client.HelloServiceProxy clientProxy;
+  com.gxk.demo.staticproxy.client.HelloServiceProxy clientProxy;
 
   @Setup
   public void setup() {
     LocalRegistry.getInstance().register(HelloService.class, new HelloServiceImpl());
-    clientProxy = new com.gxk.demo.example.client.HelloServiceProxy();
+    clientProxy = new com.gxk.demo.staticproxy.client.HelloServiceProxy();
   }
 
   @Benchmark

@@ -1,9 +1,9 @@
-package com.gxk.demo.example;
+package com.gxk.demo.staticproxy;
 
-import com.gxk.demo.example.client.HelloServiceProxy;
+import com.gxk.demo.staticproxy.client.HelloServiceProxy;
 import com.gxk.demo.example.core.HelloService;
 import com.gxk.demo.example.core.HelloServiceImpl;
-import com.gxk.demo.example.register.LocalRegistry;
+import com.gxk.demo.register.LocalRegistry;
 
 public class Boot {
 

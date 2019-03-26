@@ -1,6 +1,6 @@
-package com.gxk.demo.example.proxy;
+package com.gxk.demo.dynamicproxy.proxy;
 
-import com.gxk.demo.example.register.LocalRegistry;
+import com.gxk.demo.register.LocalRegistry;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

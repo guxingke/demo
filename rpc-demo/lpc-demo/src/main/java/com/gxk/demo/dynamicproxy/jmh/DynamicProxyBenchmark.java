@@ -1,10 +1,10 @@
-package com.gxk.demo.jmh;
+package com.gxk.demo.dynamicproxy.jmh;
 
 import com.gxk.demo.example.core.HelloService;
 import com.gxk.demo.example.core.HelloServiceImpl;
-import com.gxk.demo.example.proxy.ConsumerInvocationHandler;
-import com.gxk.demo.example.proxy.ProviderInvocationHandler;
-import com.gxk.demo.example.register.LocalRegistry;
+import com.gxk.demo.dynamicproxy.proxy.ConsumerInvocationHandler;
+import com.gxk.demo.dynamicproxy.proxy.ProviderInvocationHandler;
+import com.gxk.demo.register.LocalRegistry;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Measurement;

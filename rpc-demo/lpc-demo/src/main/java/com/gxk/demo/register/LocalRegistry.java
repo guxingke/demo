@@ -1,4 +1,4 @@
-package com.gxk.demo.example.register;
+package com.gxk.demo.register;
 
 import java.util.HashMap;
 import java.util.Map;

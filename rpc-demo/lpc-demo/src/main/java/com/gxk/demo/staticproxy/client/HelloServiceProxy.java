@@ -1,13 +1,13 @@
-package com.gxk.demo.example.server;
+package com.gxk.demo.staticproxy.client;
 
 import com.gxk.demo.example.core.HelloService;
+import com.gxk.demo.register.LocalRegistry;
 
 public class HelloServiceProxy implements HelloService {
+  HelloService helloService;
 
-  private final HelloService helloService;
-
-  public HelloServiceProxy(HelloService helloService) {
-    this.helloService = helloService;
+  public HelloServiceProxy() {
+    helloService = (HelloService) LocalRegistry.getInstance().get(HelloService.class);
   }
 
   @Override
