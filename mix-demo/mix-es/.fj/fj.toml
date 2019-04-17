@@ -1,0 +1,7 @@
+package = "com.gxk.demo"
+author = "gxk"
+name = "mix-es"
+
+[info]
+version = "0.0.1"
+desc = "todo"
