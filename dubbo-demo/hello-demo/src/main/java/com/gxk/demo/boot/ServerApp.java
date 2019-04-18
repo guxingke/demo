@@ -4,12 +4,12 @@ import com.gxk.demo.service.HelloService;
 import com.gxk.demo.service.HelloServiceImpl;
 import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ProtocolConfig;
-import org.apache.dubbo.config.ReferenceConfig;
 import org.apache.dubbo.config.RegistryConfig;
 import org.apache.dubbo.config.ServiceConfig;
 
 import java.io.IOException;
 
+// -Djava.net.preferIPv4Stack=true
 public class ServerApp {
   public static void main(String[] args) throws IOException {
     ServiceConfig<HelloServiceImpl> service = new ServiceConfig<>();
@@ -22,16 +22,12 @@ public class ServerApp {
     registry.setCheck(false);
     service.setRegistry(registry);
 
-    service.setProtocol(new ProtocolConfig("injvm"));
+    service.setProtocol(new ProtocolConfig());
 
     service.setInterface(HelloService.class);
     service.setRef(new HelloServiceImpl());
     service.export();
 
-    ReferenceConfig<HelloService> reference = new ReferenceConfig<>();
-    reference.setInterface(HelloService.class);
-    HelloService service2 = reference.get();
-    String message = service2.hello("dubbo");
-    System.out.println(message);
+    System.in.read();
   }
 }
