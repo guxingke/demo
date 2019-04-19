@@ -37,7 +37,7 @@ public class EventToEs {
     );
     RestHighLevelClient client = new RestHighLevelClient(builder);
 
-    Path path = Paths.get("/Users/gxk/temp/m2t__9774a1e6_f6fa_4944_932d_63949aa83baf");
+    Path path = Paths.get("/Users/gxk/temp/m2t");
     List<String> lines = Files.readAllLines(path);
     System.out.println(lines.size());
 
@@ -64,6 +64,7 @@ public class EventToEs {
           IndexRequest request = new IndexRequest("events", "event", it.getId());
           Map<String, Object> map = new HashMap<>();
           map.put("action", it.action);
+          map.put("traceId", it.traceId);
           map.put("fromUid", it.fromUid);
           map.put("toUid", it.toUid);
           map.put("@timestamp", new Date(it.timestamp));
@@ -89,9 +90,10 @@ public class EventToEs {
     return new Event(
         split[0],
         split[1],
-        Longs.tryParse(split[2]),
+        split[2],
         Longs.tryParse(split[3]),
-        Longs.tryParse(split[4])
+        Longs.tryParse(split[4]),
+        Longs.tryParse(split[5])
     );
   }
 
@@ -103,6 +105,7 @@ public class EventToEs {
 
     private String id;
     private String action;
+    private String traceId;
     private Long fromUid;
     private Long toUid;
     private Long timestamp;
