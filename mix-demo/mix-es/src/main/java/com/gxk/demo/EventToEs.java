@@ -33,7 +33,7 @@ public class EventToEs {
 
   private void work() throws IOException {
     RestClientBuilder builder = RestClient.builder(
-        new HttpHost("localhost", 9200, "http")
+        new HttpHost("10.1.2.53", 9200, "http")
     );
     RestHighLevelClient client = new RestHighLevelClient(builder);
 
