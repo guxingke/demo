@@ -1,0 +1,10 @@
+###gen###
+# just support string
+
+name = "simple"
+author = "gxk"
+package = "com.gxk.demo"
+
+[info]
+version = "0.0.1"
+desc = "todo"
