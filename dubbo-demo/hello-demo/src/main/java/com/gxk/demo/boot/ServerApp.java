@@ -18,12 +18,11 @@ public class ServerApp {
     application.setQosEnable(false);
     service.setApplication(application);
 
-    RegistryConfig registry = new RegistryConfig("multicast://224.5.6.7:1234");
+    RegistryConfig registry = new RegistryConfig("N/A");
     registry.setCheck(false);
     service.setRegistry(registry);
 
     service.setProtocol(new ProtocolConfig());
-
     service.setInterface(HelloService.class);
     service.setRef(new HelloServiceImpl());
     service.export();

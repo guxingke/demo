@@ -16,4 +16,8 @@ public class WorldServiceImpl implements WorldService {
         .getLocalAddress();
   }
 
+  @Override
+  public TestResp hello1(TestReq req) {
+    return new TestResp(req.getId(), req.getMsg());
+  }
 }
