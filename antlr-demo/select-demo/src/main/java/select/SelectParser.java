@@ -20,15 +20,15 @@ public class SelectParser extends Parser {
 		new PredictionContextCache();
 	public static final int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
-		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, ID=16, TEXT_STRING=17, 
-		ID_LITERAL=18, DECIMAL_LITERAL=19, WS=20;
+		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
+		ID=18, TEXT_STRING=19, ID_LITERAL=20, DECIMAL_LITERAL=21, WS=22;
 	public static final int
-		RULE_stat = 0, RULE_query = 1, RULE_selectEles = 2, RULE_selectEle = 3, 
+		RULE_stat = 0, RULE_query = 1, RULE_selectElse = 2, RULE_selectEle = 3, 
 		RULE_tableSrc = 4, RULE_where = 5, RULE_logicExp = 6, RULE_val = 7, RULE_decimalLiteral = 8, 
 		RULE_textLiteral = 9, RULE_logicOp = 10, RULE_cmpOp = 11, RULE_commonName = 12;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"stat", "query", "selectEles", "selectEle", "tableSrc", "where", "logicExp", 
+			"stat", "query", "selectElse", "selectEle", "tableSrc", "where", "logicExp", 
 			"val", "decimalLiteral", "textLiteral", "logicOp", "cmpOp", "commonName"
 		};
 	}
@@ -37,15 +37,15 @@ public class SelectParser extends Parser {
 	private static String[] makeLiteralNames() {
 		return new String[] {
 			null, "'select'", "'from'", "'*'", "','", "'where'", "'not'", "'in'", 
-			"'('", "')'", "'and'", "'or'", "'='", "'>'", "'<'", "'!'"
+			"'('", "')'", "'and'", "'or'", "'='", "'>'", "'<'", "'<='", "'>='", "'!'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, "ID", "TEXT_STRING", "ID_LITERAL", "DECIMAL_LITERAL", 
-			"WS"
+			null, null, null, null, null, null, "ID", "TEXT_STRING", "ID_LITERAL", 
+			"DECIMAL_LITERAL", "WS"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -136,8 +136,8 @@ public class SelectParser extends Parser {
 	}
 
 	public static class QueryContext extends ParserRuleContext {
-		public SelectElesContext selectEles() {
-			return getRuleContext(SelectElesContext.class,0);
+		public SelectElseContext selectElse() {
+			return getRuleContext(SelectElseContext.class,0);
 		}
 		public TableSrcContext tableSrc() {
 			return getRuleContext(TableSrcContext.class,0);
@@ -166,7 +166,7 @@ public class SelectParser extends Parser {
 			setState(28);
 			match(T__0);
 			setState(29);
-			selectEles();
+			selectElse();
 			setState(30);
 			match(T__1);
 			setState(31);
@@ -194,7 +194,7 @@ public class SelectParser extends Parser {
 		return _localctx;
 	}
 
-	public static class SelectElesContext extends ParserRuleContext {
+	public static class SelectElseContext extends ParserRuleContext {
 		public Token star;
 		public List<SelectEleContext> selectEle() {
 			return getRuleContexts(SelectEleContext.class);
@@ -202,20 +202,20 @@ public class SelectParser extends Parser {
 		public SelectEleContext selectEle(int i) {
 			return getRuleContext(SelectEleContext.class,i);
 		}
-		public SelectElesContext(ParserRuleContext parent, int invokingState) {
+		public SelectElseContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_selectEles; }
+		@Override public int getRuleIndex() { return RULE_selectElse; }
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SelectVisitor ) return ((SelectVisitor<? extends T>)visitor).visitSelectEles(this);
+			if ( visitor instanceof SelectVisitor ) return ((SelectVisitor<? extends T>)visitor).visitSelectElse(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final SelectElesContext selectEles() throws RecognitionException {
-		SelectElesContext _localctx = new SelectElesContext(_ctx, getState());
-		enterRule(_localctx, 4, RULE_selectEles);
+	public final SelectElseContext selectElse() throws RecognitionException {
+		SelectElseContext _localctx = new SelectElseContext(_ctx, getState());
+		enterRule(_localctx, 4, RULE_selectElse);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -226,7 +226,7 @@ public class SelectParser extends Parser {
 			case T__2:
 				{
 				setState(35);
-				((SelectElesContext)_localctx).star = match(T__2);
+				((SelectElseContext)_localctx).star = match(T__2);
 				}
 				break;
 			case ID:
@@ -378,11 +378,19 @@ public class SelectParser extends Parser {
 	}
 
 	public static class LogicExpContext extends ParserRuleContext {
+		public LogicExpContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_logicExp; }
+	 
+		public LogicExpContext() { }
+		public void copyFrom(LogicExpContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class OtherExprContext extends LogicExpContext {
 		public CommonNameContext commonName() {
 			return getRuleContext(CommonNameContext.class,0);
-		}
-		public CmpOpContext cmpOp() {
-			return getRuleContext(CmpOpContext.class,0);
 		}
 		public List<ValContext> val() {
 			return getRuleContexts(ValContext.class);
@@ -390,6 +398,25 @@ public class SelectParser extends Parser {
 		public ValContext val(int i) {
 			return getRuleContext(ValContext.class,i);
 		}
+		public OtherExprContext(LogicExpContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SelectVisitor ) return ((SelectVisitor<? extends T>)visitor).visitOtherExpr(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class ParentsExprContext extends LogicExpContext {
+		public LogicExpContext logicExp() {
+			return getRuleContext(LogicExpContext.class,0);
+		}
+		public ParentsExprContext(LogicExpContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SelectVisitor ) return ((SelectVisitor<? extends T>)visitor).visitParentsExpr(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class ExprContext extends LogicExpContext {
 		public List<LogicExpContext> logicExp() {
 			return getRuleContexts(LogicExpContext.class);
 		}
@@ -399,13 +426,27 @@ public class SelectParser extends Parser {
 		public LogicOpContext logicOp() {
 			return getRuleContext(LogicOpContext.class,0);
 		}
-		public LogicExpContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_logicExp; }
+		public ExprContext(LogicExpContext ctx) { copyFrom(ctx); }
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SelectVisitor ) return ((SelectVisitor<? extends T>)visitor).visitLogicExp(this);
+			if ( visitor instanceof SelectVisitor ) return ((SelectVisitor<? extends T>)visitor).visitExpr(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class CmpExprContext extends LogicExpContext {
+		public CommonNameContext commonName() {
+			return getRuleContext(CommonNameContext.class,0);
+		}
+		public CmpOpContext cmpOp() {
+			return getRuleContext(CmpOpContext.class,0);
+		}
+		public ValContext val() {
+			return getRuleContext(ValContext.class,0);
+		}
+		public CmpExprContext(LogicExpContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SelectVisitor ) return ((SelectVisitor<? extends T>)visitor).visitCmpExpr(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -431,6 +472,10 @@ public class SelectParser extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,5,_ctx) ) {
 			case 1:
 				{
+				_localctx = new CmpExprContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
+
 				setState(54);
 				commonName();
 				setState(55);
@@ -441,6 +486,9 @@ public class SelectParser extends Parser {
 				break;
 			case 2:
 				{
+				_localctx = new OtherExprContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(58);
 				commonName();
 				setState(60);
@@ -481,6 +529,9 @@ public class SelectParser extends Parser {
 				break;
 			case 3:
 				{
+				_localctx = new ParentsExprContext(_localctx);
+				_ctx = _localctx;
+				_prevctx = _localctx;
 				setState(74);
 				match(T__7);
 				setState(75);
@@ -500,7 +551,7 @@ public class SelectParser extends Parser {
 					_prevctx = _localctx;
 					{
 					{
-					_localctx = new LogicExpContext(_parentctx, _parentState);
+					_localctx = new ExprContext(new LogicExpContext(_parentctx, _parentState));
 					pushNewRecursionContext(_localctx, _startState, RULE_logicExp);
 					setState(80);
 					if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
@@ -718,77 +769,55 @@ public class SelectParser extends Parser {
 		CmpOpContext _localctx = new CmpOpContext(_ctx, getState());
 		enterRule(_localctx, 22, RULE_cmpOp);
 		try {
-			setState(114);
+			setState(107);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,8,_ctx) ) {
-			case 1:
+			switch (_input.LA(1)) {
+			case T__11:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(100);
 				match(T__11);
 				}
 				break;
-			case 2:
+			case T__12:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(101);
 				match(T__12);
 				}
 				break;
-			case 3:
+			case T__13:
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(102);
 				match(T__13);
 				}
 				break;
-			case 4:
+			case T__14:
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(103);
-				match(T__13);
-				setState(104);
-				match(T__11);
+				match(T__14);
 				}
 				break;
-			case 5:
+			case T__15:
 				enterOuterAlt(_localctx, 5);
 				{
+				setState(104);
+				match(T__15);
+				}
+				break;
+			case T__16:
+				enterOuterAlt(_localctx, 6);
+				{
 				setState(105);
-				match(T__12);
+				match(T__16);
 				setState(106);
 				match(T__11);
 				}
 				break;
-			case 6:
-				enterOuterAlt(_localctx, 6);
-				{
-				setState(107);
-				match(T__13);
-				setState(108);
-				match(T__12);
-				}
-				break;
-			case 7:
-				enterOuterAlt(_localctx, 7);
-				{
-				setState(109);
-				match(T__14);
-				setState(110);
-				match(T__11);
-				}
-				break;
-			case 8:
-				enterOuterAlt(_localctx, 8);
-				{
-				setState(111);
-				match(T__13);
-				setState(112);
-				match(T__11);
-				setState(113);
-				match(T__12);
-				}
-				break;
+			default:
+				throw new NoViableAltException(this);
 			}
 		}
 		catch (RecognitionException re) {
@@ -821,7 +850,7 @@ public class SelectParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(116);
+			setState(109);
 			match(ID);
 			}
 		}
@@ -852,35 +881,33 @@ public class SelectParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\26y\4\2\t\2\4\3\t"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\30r\4\2\t\2\4\3\t"+
 		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4"+
 		"\f\t\f\4\r\t\r\4\16\t\16\3\2\3\2\3\3\3\3\3\3\3\3\3\3\5\3$\n\3\3\4\3\4"+
 		"\5\4(\n\4\3\4\3\4\7\4,\n\4\f\4\16\4/\13\4\3\5\3\5\3\6\3\6\3\7\3\7\3\7"+
 		"\3\b\3\b\3\b\3\b\3\b\3\b\3\b\5\b?\n\b\3\b\3\b\3\b\3\b\3\b\7\bF\n\b\f\b"+
 		"\16\bI\13\b\3\b\3\b\3\b\3\b\3\b\3\b\5\bQ\n\b\3\b\3\b\3\b\3\b\7\bW\n\b"+
 		"\f\b\16\bZ\13\b\3\t\3\t\3\t\5\t_\n\t\3\n\3\n\3\13\3\13\3\f\3\f\3\r\3\r"+
-		"\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\3\r\5\ru\n\r\3\16\3\16\3"+
-		"\16\2\3\16\17\2\4\6\b\n\f\16\20\22\24\26\30\32\2\3\3\2\f\r\2|\2\34\3\2"+
-		"\2\2\4\36\3\2\2\2\6\'\3\2\2\2\b\60\3\2\2\2\n\62\3\2\2\2\f\64\3\2\2\2\16"+
-		"P\3\2\2\2\20^\3\2\2\2\22`\3\2\2\2\24b\3\2\2\2\26d\3\2\2\2\30t\3\2\2\2"+
-		"\32v\3\2\2\2\34\35\5\4\3\2\35\3\3\2\2\2\36\37\7\3\2\2\37 \5\6\4\2 !\7"+
-		"\4\2\2!#\5\n\6\2\"$\5\f\7\2#\"\3\2\2\2#$\3\2\2\2$\5\3\2\2\2%(\7\5\2\2"+
-		"&(\5\b\5\2\'%\3\2\2\2\'&\3\2\2\2(-\3\2\2\2)*\7\6\2\2*,\5\b\5\2+)\3\2\2"+
-		"\2,/\3\2\2\2-+\3\2\2\2-.\3\2\2\2.\7\3\2\2\2/-\3\2\2\2\60\61\5\32\16\2"+
-		"\61\t\3\2\2\2\62\63\5\32\16\2\63\13\3\2\2\2\64\65\7\7\2\2\65\66\5\16\b"+
-		"\2\66\r\3\2\2\2\678\b\b\1\289\5\32\16\29:\5\30\r\2:;\5\20\t\2;Q\3\2\2"+
-		"\2<>\5\32\16\2=?\7\b\2\2>=\3\2\2\2>?\3\2\2\2?@\3\2\2\2@A\7\t\2\2AB\7\n"+
-		"\2\2BG\5\20\t\2CD\7\6\2\2DF\5\20\t\2EC\3\2\2\2FI\3\2\2\2GE\3\2\2\2GH\3"+
-		"\2\2\2HJ\3\2\2\2IG\3\2\2\2JK\7\13\2\2KQ\3\2\2\2LM\7\n\2\2MN\5\16\b\2N"+
-		"O\7\13\2\2OQ\3\2\2\2P\67\3\2\2\2P<\3\2\2\2PL\3\2\2\2QX\3\2\2\2RS\f\6\2"+
-		"\2ST\5\26\f\2TU\5\16\b\7UW\3\2\2\2VR\3\2\2\2WZ\3\2\2\2XV\3\2\2\2XY\3\2"+
-		"\2\2Y\17\3\2\2\2ZX\3\2\2\2[_\5\32\16\2\\_\5\24\13\2]_\5\22\n\2^[\3\2\2"+
-		"\2^\\\3\2\2\2^]\3\2\2\2_\21\3\2\2\2`a\7\25\2\2a\23\3\2\2\2bc\7\23\2\2"+
-		"c\25\3\2\2\2de\t\2\2\2e\27\3\2\2\2fu\7\16\2\2gu\7\17\2\2hu\7\20\2\2ij"+
-		"\7\20\2\2ju\7\16\2\2kl\7\17\2\2lu\7\16\2\2mn\7\20\2\2nu\7\17\2\2op\7\21"+
-		"\2\2pu\7\16\2\2qr\7\20\2\2rs\7\16\2\2su\7\17\2\2tf\3\2\2\2tg\3\2\2\2t"+
-		"h\3\2\2\2ti\3\2\2\2tk\3\2\2\2tm\3\2\2\2to\3\2\2\2tq\3\2\2\2u\31\3\2\2"+
-		"\2vw\7\22\2\2w\33\3\2\2\2\13#\'->GPX^t";
+		"\3\r\3\r\3\r\3\r\3\r\5\rn\n\r\3\16\3\16\3\16\2\3\16\17\2\4\6\b\n\f\16"+
+		"\20\22\24\26\30\32\2\3\3\2\f\r\2s\2\34\3\2\2\2\4\36\3\2\2\2\6\'\3\2\2"+
+		"\2\b\60\3\2\2\2\n\62\3\2\2\2\f\64\3\2\2\2\16P\3\2\2\2\20^\3\2\2\2\22`"+
+		"\3\2\2\2\24b\3\2\2\2\26d\3\2\2\2\30m\3\2\2\2\32o\3\2\2\2\34\35\5\4\3\2"+
+		"\35\3\3\2\2\2\36\37\7\3\2\2\37 \5\6\4\2 !\7\4\2\2!#\5\n\6\2\"$\5\f\7\2"+
+		"#\"\3\2\2\2#$\3\2\2\2$\5\3\2\2\2%(\7\5\2\2&(\5\b\5\2\'%\3\2\2\2\'&\3\2"+
+		"\2\2(-\3\2\2\2)*\7\6\2\2*,\5\b\5\2+)\3\2\2\2,/\3\2\2\2-+\3\2\2\2-.\3\2"+
+		"\2\2.\7\3\2\2\2/-\3\2\2\2\60\61\5\32\16\2\61\t\3\2\2\2\62\63\5\32\16\2"+
+		"\63\13\3\2\2\2\64\65\7\7\2\2\65\66\5\16\b\2\66\r\3\2\2\2\678\b\b\1\28"+
+		"9\5\32\16\29:\5\30\r\2:;\5\20\t\2;Q\3\2\2\2<>\5\32\16\2=?\7\b\2\2>=\3"+
+		"\2\2\2>?\3\2\2\2?@\3\2\2\2@A\7\t\2\2AB\7\n\2\2BG\5\20\t\2CD\7\6\2\2DF"+
+		"\5\20\t\2EC\3\2\2\2FI\3\2\2\2GE\3\2\2\2GH\3\2\2\2HJ\3\2\2\2IG\3\2\2\2"+
+		"JK\7\13\2\2KQ\3\2\2\2LM\7\n\2\2MN\5\16\b\2NO\7\13\2\2OQ\3\2\2\2P\67\3"+
+		"\2\2\2P<\3\2\2\2PL\3\2\2\2QX\3\2\2\2RS\f\6\2\2ST\5\26\f\2TU\5\16\b\7U"+
+		"W\3\2\2\2VR\3\2\2\2WZ\3\2\2\2XV\3\2\2\2XY\3\2\2\2Y\17\3\2\2\2ZX\3\2\2"+
+		"\2[_\5\32\16\2\\_\5\24\13\2]_\5\22\n\2^[\3\2\2\2^\\\3\2\2\2^]\3\2\2\2"+
+		"_\21\3\2\2\2`a\7\27\2\2a\23\3\2\2\2bc\7\25\2\2c\25\3\2\2\2de\t\2\2\2e"+
+		"\27\3\2\2\2fn\7\16\2\2gn\7\17\2\2hn\7\20\2\2in\7\21\2\2jn\7\22\2\2kl\7"+
+		"\23\2\2ln\7\16\2\2mf\3\2\2\2mg\3\2\2\2mh\3\2\2\2mi\3\2\2\2mj\3\2\2\2m"+
+		"k\3\2\2\2n\31\3\2\2\2op\7\24\2\2p\33\3\2\2\2\13#\'->GPX^m";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

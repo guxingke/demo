@@ -1,27 +1,33 @@
+import java.util.List;
+import java.util.stream.Collectors;
 import select.SelectBaseVisitor;
-import select.SelectParser.CmpOpContext;
+import select.SelectParser.CmpExprContext;
 import select.SelectParser.CommonNameContext;
-import select.SelectParser.DecimalLiteralContext;
-import select.SelectParser.LogicExpContext;
+import select.SelectParser.ExprContext;
 import select.SelectParser.LogicOpContext;
+import select.SelectParser.OtherExprContext;
+import select.SelectParser.ParentsExprContext;
 import select.SelectParser.QueryContext;
 import select.SelectParser.SelectEleContext;
-import select.SelectParser.SelectElesContext;
+import select.SelectParser.SelectElseContext;
 import select.SelectParser.StatContext;
 import select.SelectParser.TableSrcContext;
-import select.SelectParser.TextLiteralContext;
-import select.SelectParser.ValContext;
 import select.SelectParser.WhereContext;
 
 public class EvalVisitor extends SelectBaseVisitor<String> {
 
   private String table;
+  private String project;
+  private String cond;
 
   @Override
   public String visitStat(StatContext ctx) {
     super.visitStat(ctx);
-
-    return table;
+    if (project == null) {
+      return String.format("db.%s.find(%s)", table, cond);
+    } else {
+      return String.format("db.%s.find(%s,%s)", table, cond, project);
+    }
   }
 
   @Override
@@ -30,13 +36,17 @@ public class EvalVisitor extends SelectBaseVisitor<String> {
   }
 
   @Override
-  public String visitSelectEles(SelectElesContext ctx) {
-    return super.visitSelectEles(ctx);
+  public String visitSelectElse(SelectElseContext ctx) {
+    List<String> fields = ctx.selectEle().stream().map(super::visit).collect(Collectors.toList());
+    String join = String.join(", ", fields);
+    project = "{" + join + "}";
+    return project;
   }
 
   @Override
   public String visitSelectEle(SelectEleContext ctx) {
-    return super.visitSelectEle(ctx);
+    String text = ctx.getText();
+    return String.format("%s:1", text);
   }
 
   @Override
@@ -47,37 +57,53 @@ public class EvalVisitor extends SelectBaseVisitor<String> {
 
   @Override
   public String visitWhere(WhereContext ctx) {
-    return super.visitWhere(ctx);
-  }
-
-  @Override
-  public String visitLogicExp(LogicExpContext ctx) {
-    return super.visitLogicExp(ctx);
-  }
-
-  @Override
-  public String visitVal(ValContext ctx) {
-    return super.visitVal(ctx);
-  }
-
-  @Override
-  public String visitDecimalLiteral(DecimalLiteralContext ctx) {
-    return super.visitDecimalLiteral(ctx);
-  }
-
-  @Override
-  public String visitTextLiteral(TextLiteralContext ctx) {
-    return super.visitTextLiteral(ctx);
+    cond = super.visitWhere(ctx);
+    return cond;
   }
 
   @Override
   public String visitLogicOp(LogicOpContext ctx) {
-    return super.visitLogicOp(ctx);
+    String s = super.visitLogicOp(ctx);
+    return s;
   }
 
   @Override
-  public String visitCmpOp(CmpOpContext ctx) {
-    return super.visitCmpOp(ctx);
+  public String visitOtherExpr(OtherExprContext ctx) {
+    return super.visitOtherExpr(ctx);
+  }
+
+  @Override
+  public String visitParentsExpr(ParentsExprContext ctx) {
+    String s = super.visit(ctx.logicExp());
+    return s;
+  }
+
+  @Override
+  public String visitExpr(ExprContext ctx) {
+    String op = ctx.logicOp().getText();
+    String left = super.visit(ctx.logicExp(0));
+    String right = super.visit(ctx.logicExp(1));
+    return String.format("{$%s: [%s,%s]}", op, left, right);
+  }
+
+  @Override
+  public String visitCmpExpr(CmpExprContext ctx) {
+    String op = ctx.cmpOp().getText();
+    String name = ctx.commonName().getText();
+    String text = ctx.val().getText();
+
+    switch (op) {
+      case "=":
+        return String.format("{$eq: {%s: %s}}", name, text);
+      case ">":
+        return String.format("{$gt: {%s: %s}}", name, text);
+      case "<":
+        return String.format("{$lt: {%s: %s}}", name, text);
+      case "!=":
+        return String.format("{$ne: {%s: %s}}", name, text);
+      default:
+        return String.format("{$eq: {%s: %s}}", name, text);
+    }
   }
 
   @Override

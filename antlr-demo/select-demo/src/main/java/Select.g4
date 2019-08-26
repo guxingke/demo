@@ -10,7 +10,7 @@ stat
 
  query:
    'select'
-    selectEles
+    selectElse
     'from'
     tableSrc
     (where)?
@@ -19,7 +19,7 @@ stat
 //    (limit)?
     ;
 
-selectEles
+selectElse
 : (star='*' | selectEle ) (',' selectEle )*
 ;
 
@@ -36,10 +36,10 @@ where
 ;
 
 logicExp
-: logicExp logicOp logicExp
-| commonName cmpOp val
-| commonName 'not'? 'in' '(' val (',' val)* ')'
-| '(' logicExp ')'
+: logicExp logicOp logicExp # expr
+| commonName cmpOp val      # cmpExpr
+| commonName 'not'? 'in' '(' val (',' val)* ')' # otherExpr
+| '(' logicExp ')'          # parentsExpr
 ;
 
 val
@@ -61,8 +61,12 @@ logicOp
 ;
 
 cmpOp
-: '=' | '>' | '<' | '<' '=' | '>' '='
-| '<' '>' | '!' '=' | '<' '=' '>'
+: '='
+| '>'
+| '<'
+| '<='
+| '>='
+| '!' '='
 ;
 
 commonName

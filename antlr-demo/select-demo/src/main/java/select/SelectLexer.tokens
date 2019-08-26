@@ -13,11 +13,13 @@ T__11=12
 T__12=13
 T__13=14
 T__14=15
-ID=16
-TEXT_STRING=17
-ID_LITERAL=18
-DECIMAL_LITERAL=19
-WS=20
+T__15=16
+T__16=17
+ID=18
+TEXT_STRING=19
+ID_LITERAL=20
+DECIMAL_LITERAL=21
+WS=22
 'select'=1
 'from'=2
 '*'=3
@@ -32,4 +34,6 @@ WS=20
 '='=12
 '>'=13
 '<'=14
-'!'=15
+'<='=15
+'>='=16
+'!'=17

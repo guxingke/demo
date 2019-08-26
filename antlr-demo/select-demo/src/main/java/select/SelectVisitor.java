@@ -25,11 +25,11 @@ public interface SelectVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitQuery(SelectParser.QueryContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SelectParser#selectEles}.
+	 * Visit a parse tree produced by {@link SelectParser#selectElse}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSelectEles(SelectParser.SelectElesContext ctx);
+	T visitSelectElse(SelectParser.SelectElseContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SelectParser#selectEle}.
 	 * @param ctx the parse tree
@@ -49,11 +49,33 @@ public interface SelectVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitWhere(SelectParser.WhereContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SelectParser#logicExp}.
+	 * Visit a parse tree produced by the {@code otherExpr}
+	 * labeled alternative in {@link SelectParser#logicExp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitLogicExp(SelectParser.LogicExpContext ctx);
+	T visitOtherExpr(SelectParser.OtherExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code parentsExpr}
+	 * labeled alternative in {@link SelectParser#logicExp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParentsExpr(SelectParser.ParentsExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code expr}
+	 * labeled alternative in {@link SelectParser#logicExp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpr(SelectParser.ExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code cmpExpr}
+	 * labeled alternative in {@link SelectParser#logicExp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCmpExpr(SelectParser.CmpExprContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SelectParser#val}.
 	 * @param ctx the parse tree
