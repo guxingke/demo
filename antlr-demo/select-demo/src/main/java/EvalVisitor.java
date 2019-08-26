@@ -94,15 +94,19 @@ public class EvalVisitor extends SelectBaseVisitor<String> {
 
     switch (op) {
       case "=":
-        return String.format("{$eq: {%s: %s}}", name, text);
+        return String.format("{%s: {$eq: %s}}", name, text);
       case ">":
-        return String.format("{$gt: {%s: %s}}", name, text);
+        return String.format("{%s: {$gt: %s}}", name, text);
+      case ">=":
+        return String.format("{%s: {$gte: %s}}", name, text);
       case "<":
-        return String.format("{$lt: {%s: %s}}", name, text);
+        return String.format("{%s: {$lt: %s}}", name, text);
+      case "<=":
+        return String.format("{%s: {$lte: %s}}", name, text);
       case "!=":
-        return String.format("{$ne: {%s: %s}}", name, text);
+        return String.format("{%s: {$ne: %s}}", name, text);
       default:
-        return String.format("{$eq: {%s: %s}}", name, text);
+        return String.format("{%s: {$eq: %s}}", name, text);
     }
   }
 
