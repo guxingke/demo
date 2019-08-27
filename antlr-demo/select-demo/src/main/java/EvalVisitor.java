@@ -1,10 +1,13 @@
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import select.SelectBaseVisitor;
 import select.SelectParser.CmpExprContext;
 import select.SelectParser.CommonNameContext;
 import select.SelectParser.ExprContext;
+import select.SelectParser.LimitContext;
 import select.SelectParser.LogicOpContext;
+import select.SelectParser.OrderByContext;
 import select.SelectParser.OtherExprContext;
 import select.SelectParser.ParentsExprContext;
 import select.SelectParser.QueryContext;
@@ -19,14 +22,17 @@ public class EvalVisitor extends SelectBaseVisitor<String> {
   private String table;
   private String project;
   private String cond;
+  private String sort = "{_id:-1}";
+  private int offset = 0;
+  private int size = 100;
 
   @Override
   public String visitStat(StatContext ctx) {
     super.visitStat(ctx);
     if (project == null) {
-      return String.format("db.%s.find(%s)", table, cond);
+      return String.format("db.%s.find(%s).sort(%s).skip(%d).limit(%d)", table, cond, sort, offset, size);
     } else {
-      return String.format("db.%s.find(%s,%s)", table, cond, project);
+      return String.format("db.%s.find(%s,%s).sort(%s).skip(%d).limit(%d)", table, cond, project, sort, offset, size);
     }
   }
 
@@ -108,6 +114,35 @@ public class EvalVisitor extends SelectBaseVisitor<String> {
       default:
         return String.format("{%s: {$eq: %s}}", name, text);
     }
+  }
+
+  @Override
+  public String visitOrderBy(OrderByContext ctx) {
+    // default
+    // .sort({ _id: -1})
+    String filed = this.visit(ctx.getChild(1));
+    int sortI = 1;
+    if (ctx.getChildCount() > 2) {
+      String visit = ctx.getChild(2).getText();
+      if (Objects.equals(visit, "desc")) {
+        sortI = -1;
+      }
+    }
+
+    sort = String.format("{%s:%d}", filed, sortI);
+    return sort;
+  }
+
+  @Override
+  public String visitLimit(LimitContext ctx) {
+    if (ctx.getChildCount() == 2) {
+      size = Integer.parseInt(ctx.getChild(1).getText());
+    } else {
+      offset = Integer.parseInt(ctx.getChild(1).getText());
+      size = Integer.parseInt(ctx.getChild(3).getText());
+    }
+
+    return "";
   }
 
   @Override

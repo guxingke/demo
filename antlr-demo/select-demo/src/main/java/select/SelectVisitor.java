@@ -77,6 +77,30 @@ public interface SelectVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCmpExpr(SelectParser.CmpExprContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SelectParser#orderBy}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOrderBy(SelectParser.OrderByContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SelectParser#limit}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLimit(SelectParser.LimitContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SelectParser#offset}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOffset(SelectParser.OffsetContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SelectParser#size}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSize(SelectParser.SizeContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SelectParser#val}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

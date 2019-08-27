@@ -15,8 +15,8 @@ stat
     tableSrc
     (where)?
 //    (groupBy)?
-//    (orderBy)?
-//    (limit)?
+    (orderBy)?
+    (limit)?
     ;
 
 selectElse
@@ -40,6 +40,25 @@ logicExp
 | commonName cmpOp val      # cmpExpr
 | commonName 'not'? 'in' '(' val (',' val)* ')' # otherExpr
 | '(' logicExp ')'          # parentsExpr
+;
+
+orderBy:
+'order by'
+commonName
+sort=('desc'|'asc')*
+;
+
+limit:
+'limit'
+offset (',' size)*
+;
+
+offset:
+DECIMAL_LITERAL
+;
+
+size:
+DECIMAL_LITERAL
 ;
 
 val
