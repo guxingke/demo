@@ -4,14 +4,13 @@ package com.gxk.demo;
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.FieldVisitor;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
 public class AsmTest implements Opcodes {
 
   public byte[] test() {
-    ClassWriter cw = new ClassWriter(0);
+    ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
     FieldVisitor fv;
     MethodVisitor mv;
     AnnotationVisitor av0;
@@ -32,7 +31,7 @@ public class AsmTest implements Opcodes {
 //      Label l1 = new Label();
 //      mv.visitLabel(l1);
 //      mv.visitLocalVariable("this", "LTest;", null, l0, l1, 0);
-      mv.visitMaxs(1, 1);
+      mv.visitMaxs(0, 0);
       mv.visitEnd();
     }
     {
@@ -51,7 +50,7 @@ public class AsmTest implements Opcodes {
 //      Label l2 = new Label();
 //      mv.visitLabel(l2);
 //      mv.visitLocalVariable("args", "[Ljava/lang/String;", null, l0, l2, 0);
-      mv.visitMaxs(2, 1);
+      mv.visitMaxs(0, 0);
       mv.visitEnd();
     }
     cw.visitEnd();
