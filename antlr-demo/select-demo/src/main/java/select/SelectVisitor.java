@@ -77,6 +77,12 @@ public interface SelectVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCmpExpr(SelectParser.CmpExprContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SelectParser#inOp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInOp(SelectParser.InOpContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SelectParser#orderBy}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

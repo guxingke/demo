@@ -1,6 +1,7 @@
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import org.antlr.v4.runtime.RuleContext;
 import select.SelectBaseVisitor;
 import select.SelectParser.CmpExprContext;
 import select.SelectParser.CommonNameContext;
@@ -74,11 +75,6 @@ public class EvalVisitor extends SelectBaseVisitor<String> {
   }
 
   @Override
-  public String visitOtherExpr(OtherExprContext ctx) {
-    return super.visitOtherExpr(ctx);
-  }
-
-  @Override
   public String visitParentsExpr(ParentsExprContext ctx) {
     String s = super.visit(ctx.logicExp());
     return s;
@@ -114,6 +110,20 @@ public class EvalVisitor extends SelectBaseVisitor<String> {
       default:
         return String.format("{%s: {$eq: %s}}", name, text);
     }
+  }
+
+  @Override
+  public String visitOtherExpr(OtherExprContext ctx) {
+    String text = ctx.inOp().getText();
+    String op = "$in";
+    if (!text.equalsIgnoreCase("in")) {
+      op = "$nin";
+    }
+    String filed = ctx.commonName().getText();
+    String val = ctx.val().stream()
+        .map(RuleContext::getText)
+        .collect(Collectors.joining(",", "[", "]"));
+    return String.format("{%s: {%s:%s}}", filed, op, val);
   }
 
   @Override

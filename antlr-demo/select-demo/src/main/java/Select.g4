@@ -38,8 +38,13 @@ where
 logicExp
 : logicExp logicOp logicExp # expr
 | commonName cmpOp val      # cmpExpr
-| commonName 'not'? 'in' '(' val (',' val)* ')' # otherExpr
+| commonName inOp '(' val (',' val)* ')' # otherExpr
 | '(' logicExp ')'          # parentsExpr
+;
+
+inOp
+: 'not in'
+| 'in'
 ;
 
 orderBy:
