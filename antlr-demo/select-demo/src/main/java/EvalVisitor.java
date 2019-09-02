@@ -1,5 +1,7 @@
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.antlr.v4.runtime.RuleContext;
 import select.SelectBaseVisitor;
@@ -26,6 +28,8 @@ public class EvalVisitor extends SelectBaseVisitor<String> {
   private String sort = "{_id:-1}";
   private int offset = 0;
   private int size = 100;
+
+  static Pattern OBJECT_ID_COMPILE = Pattern.compile("^'[a-f\\d]{24}'$");
 
   @Override
   public String visitStat(StatContext ctx) {
@@ -94,6 +98,13 @@ public class EvalVisitor extends SelectBaseVisitor<String> {
     String name = ctx.commonName().getText();
     String text = ctx.val().getText();
 
+    if (name.equalsIgnoreCase("_id") || name.equalsIgnoreCase("id") || name.endsWith("bjectId")) {
+      Matcher matcher = OBJECT_ID_COMPILE.matcher(text);
+      if (matcher.matches()) {
+        text = String.format("ObjectId(%s)", text);
+      }
+    }
+
     switch (op) {
       case "=":
         return String.format("{%s: {$eq: %s}}", name, text);
@@ -123,6 +134,14 @@ public class EvalVisitor extends SelectBaseVisitor<String> {
     String val = ctx.val().stream()
         .map(RuleContext::getText)
         .collect(Collectors.joining(",", "[", "]"));
+
+    if (filed.equalsIgnoreCase("_id") || filed.equalsIgnoreCase("id") || filed.endsWith("bjectId")) {
+      val = ctx.val().stream()
+          .map(it -> it.getText())
+          .filter(it -> OBJECT_ID_COMPILE.matcher(it).matches())
+          .map(it -> String.format("ObjectId(%s)", it))
+          .collect(Collectors.joining(",", "[", "]"));
+    }
     return String.format("{%s: {%s:%s}}", filed, op, val);
   }
 
