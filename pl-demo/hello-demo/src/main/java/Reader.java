@@ -1,10 +1,13 @@
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Reader {
 
+  // (println 1) -> 1
+  // (println "xxx") -> xxx
+  public static List<String> tokenizer(String code) {
+    Pattern pattern = Pattern.compile("[\\s ,]*(~@|[\\[\\]{}()'`~@]|\"(?:[\\\\].|[^\\\\\"])*\"?|;.*|[^\\s \\[\\]{}()'\"`~@,;]*)");
+    return new ArrayList<>();
+  }
 }
