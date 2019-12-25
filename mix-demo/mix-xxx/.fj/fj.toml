@@ -1,7 +1,0 @@
-package = "com.gxk.demo"
-author = "gxk"
-name = "mix-xxx"
-
-[info]
-version = "0.0.1"
-desc = "todo"

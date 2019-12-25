@@ -1,9 +1,0 @@
-[
-  {
-    "name": "org.jline.terminal.impl.jna.JnaSupportImpl",
-    "allDeclaredFields": true,
-    "allPublicFields": true,
-    "allDeclaredMethods": true,
-    "allPublicMethods": true
-  }
-]
