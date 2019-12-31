@@ -43,4 +43,27 @@ $ java -cp target/interpreter-demo.jar com.gxk.demo.hybrid.HybridDemo
 > 2
 ```
 
+## class 文件解释
 
+### Hello world
+```bash
+$ java -jar target/interpreter-demo.jar jvm HelloWorld
+> 1
+
+# or
+$ java -cp target/interpreter-demo.jar com.gxk.demo.jvm.JvmDemo HelloWorld
+> 1
+
+```
+
+### Sum100 
+
+```bash
+$ java -jar target/interpreter-demo.jar jvm Sum100
+> 5050
+
+# or
+$ java -cp target/interpreter-demo.jar com.gxk.demo.jvm.JvmDemo Sum100
+> 5050
+
+```
