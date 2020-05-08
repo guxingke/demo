@@ -15,7 +15,7 @@
 
     <ext.dubbo.version>2.7.4.1</ext.dubbo.version>
     <ext.curator.version>4.0.1</ext.curator.version>
-    <ext.zookeeper.version>3.4.13</ext.zookeeper.version>
+    <ext.zookeeper.version>3.4.14</ext.zookeeper.version>
   </properties>
 
   <dependencies>
