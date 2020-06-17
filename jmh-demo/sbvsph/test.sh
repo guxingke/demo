@@ -1,0 +1,1 @@
+java -jar target/benchmarks.jar -i 2 -wi 1 -f 1 -rf JSON -rff test.json
