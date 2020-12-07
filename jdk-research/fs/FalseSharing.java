@@ -6,11 +6,14 @@ public final class FalseSharing
     private final int arrayIndex;
  
     private static VolatileLong[] longs = new VolatileLong[NUM_THREADS];
+    private static VolatileLong[] longs2 = new VolatileLong[NUM_THREADS];
+
     static
     {
         for (int i = 0; i < longs.length; i++)
         {
             longs[i] = new VolatileLong();
+            longs2[i] = new VolatileLong();
         }
     }
  
@@ -24,6 +27,8 @@ public final class FalseSharing
         final long start = System.nanoTime();
         runTest();
         System.out.println("duration = " + (System.nanoTime() - start));
+
+        System.in.read();
     }
  
     private static void runTest() throws InterruptedException

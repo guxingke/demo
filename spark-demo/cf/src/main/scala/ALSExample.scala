@@ -20,6 +20,7 @@
 // $example on$
 import org.apache.spark.ml.evaluation.RegressionEvaluator
 import org.apache.spark.ml.recommendation.ALS
+import org.apache.spark.sql.catalyst.expressions.GenericRowWithSchema
 // $example off$
 import org.apache.spark.sql.SparkSession
 
@@ -39,6 +40,7 @@ object ALSExample {
   def main(args: Array[String]) {
     val spark = SparkSession
       .builder
+      .master("local[2]")
       .appName("ALSExample")
       .getOrCreate()
     import spark.implicits._
@@ -71,22 +73,28 @@ object ALSExample {
     println(s"Root-mean-square error = $rmse")
 
     // Generate top 10 movie recommendations for each user
-//    val userRecs = model.recommendForAllUsers(10)
+    //    val userRecs = model.recommendForAllUsers(10)
     // Generate top 10 user recommendations for each movie
-//    val movieRecs = model.recommendForAllItems(10)
+    //    val movieRecs = model.recommendForAllItems(10)
 
     // Generate top 10 movie recommendations for a specified set of users
     val users = ratings.select(als.getUserCol).distinct().limit(3)
 
     val userSubsetRecs = model.recommendForUserSubset(users, 10)
     // Generate top 10 user recommendations for a specified set of movies
-//    val movies = ratings.select(als.getItemCol).distinct().limit(3)
-//    val movieSubSetRecs = model.recommendForItemSubset(movies, 10)
+    //    val movies = ratings.select(als.getItemCol).distinct().limit(3)
+    //    val movieSubSetRecs = model.recommendForItemSubset(movies, 10)
     // $example off$
-//    userRecs.show()
-//    movieRecs.show()
+    //    userRecs.show()
     userSubsetRecs.show()
-//    movieSubSetRecs.show()
+
+    val rdd = userSubsetRecs.rdd.map(it => {
+      val key = it.getInt(0)
+      (key)
+    })
+
+    println(rdd.first())
+    //    movieSubSetRecs.show()
 
     spark.stop()
   }

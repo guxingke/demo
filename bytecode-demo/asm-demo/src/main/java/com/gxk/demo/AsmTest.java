@@ -37,19 +37,33 @@ public class AsmTest implements Opcodes {
     {
       mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "main", "([Ljava/lang/String;)V", null, null);
       mv.visitCode();
-//      Label l0 = new Label();
-//      mv.visitLabel(l0);
-//      mv.visitLineNumber(3, l0);
-      mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
-      mv.visitLdcInsn("test");
-      mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
-//      Label l1 = new Label();
-//      mv.visitLabel(l1);
-//      mv.visitLineNumber(4, l1);
+//      mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+//      mv.visitLdcInsn("test");
+      mv.visitMethodInsn(INVOKESTATIC, "Test", "test", "()V", false);
+      mv.visitMethodInsn(INVOKESTATIC, "Test", "test", "()Z", false);
+//      mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
       mv.visitInsn(RETURN);
-//      Label l2 = new Label();
-//      mv.visitLabel(l2);
-//      mv.visitLocalVariable("args", "[Ljava/lang/String;", null, l0, l2, 0);
+      mv.visitMaxs(0, 0);
+      mv.visitEnd();
+    }
+    {
+      mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "test", "()V", null, null);
+      mv.visitCode();
+      mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+      mv.visitLdcInsn("tv");
+      mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
+      mv.visitInsn(RETURN);
+      mv.visitMaxs(0, 0);
+      mv.visitEnd();
+    }
+    {
+      mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "test", "()Z", null, null);
+      mv.visitCode();
+      mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+      mv.visitLdcInsn("tz");
+      mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
+      mv.visitInsn(ICONST_0);
+      mv.visitInsn(IRETURN);
       mv.visitMaxs(0, 0);
       mv.visitEnd();
     }
