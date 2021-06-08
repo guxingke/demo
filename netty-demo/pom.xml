@@ -12,6 +12,7 @@
     <module>netty-echo</module>
     <module>netty-proxy</module>
     <module>netty-proxy-sb2</module>
+    <module>netty-redis-proxy</module>
   </modules>
 
   <name>netty-demo</name>

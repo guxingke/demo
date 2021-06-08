@@ -10,7 +10,7 @@ public class MyLock {
   private static Unsafe unsafe;
   private volatile int state;
   private static long stateOffset;
-  private  ConcurrentHashMap<String, Thread> map = new ConcurrentHashMap<>();
+  private ConcurrentHashMap<String, Thread> map = new ConcurrentHashMap<>();
 
   static {
     try {
@@ -29,6 +29,7 @@ public class MyLock {
         System.out.println("Thread: " + Thread.currentThread().getName() + " got the lock");
         break;
       } else {
+        System.out.println("Thread: " + Thread.currentThread().getName() + " try the lock");
         map.put(Thread.currentThread().getName(), Thread.currentThread());
         unsafe.park(false, 0);
       }
