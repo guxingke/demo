@@ -34,6 +34,8 @@ public class Main {
     final CharSequenceJavaFileObject test = new CharSequenceJavaFileObject("Test",
         "public class Test { public static void v(int x) { "
             + "com.gxk.demo.Test.hello(2); "
+            + "try{}finally{}; "
+            + "com.gxk.demo.Test2.hello(1); "
             + "com.gxk.demo.Test.hello(java.lang.Math.abs(-12)); "
             + "} }");
     fileManager.addJavaFileObject(StandardLocation.SOURCE_PATH, "", "Test.java", test);
@@ -46,7 +48,15 @@ public class Main {
     final CompilationTask task = compiler
         .getTask(null, fileManager, dc, options, null, Arrays.asList(test));
 
+    final TestProcessor processor = new TestProcessor(new TestScanner());
+    task.setProcessors(Arrays.asList(processor));
+
     final Boolean result = task.call();
+
+    if (!processor.isOk()) {
+      return;
+    }
+
     if (result) {
       System.out.println();
     }
