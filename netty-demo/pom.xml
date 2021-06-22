@@ -27,7 +27,7 @@
     <maven.compiler.plugin>3.7.0</maven.compiler.plugin>
     <maven.source.plugin>3.0.1</maven.source.plugin>
 
-    <netty.version>4.1.28.Final</netty.version>
+    <netty.version>4.1.42.Final</netty.version>
   </properties>
 
   <dependencyManagement>
