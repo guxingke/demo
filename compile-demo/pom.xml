@@ -12,7 +12,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
-    <main.class>com.gxk.demo.Main</main.class>
+    <main.class>com.gxk.demo.v1.Main</main.class>
   </properties>
 
   <dependencies>

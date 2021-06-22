@@ -1,4 +1,4 @@
-package com.gxk.demo;
+package com.gxk.demo.v1;
 
 import com.sun.source.tree.MethodInvocationTree;
 import com.sun.source.tree.MethodTree;
@@ -23,7 +23,7 @@ public class TestScanner extends TreePathScanner<Void, Void> {
     acs.add("java.util.Map");
     acs.add("java.util.HashMap");
 
-    acs.add("com.gxk.demo.Test");
+    acs.add("com.gxk.demo.v1.Test");
   }
 
   @Override

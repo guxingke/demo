@@ -1,5 +1,6 @@
 package com.gxk.demo;
 
+import com.gxk.demo.v1.Main;
 import org.junit.Before;
 import org.junit.Test;
 

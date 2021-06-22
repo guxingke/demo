@@ -1,4 +1,4 @@
-package com.gxk.demo;
+package com.gxk.demo.v1;
 
 import java.io.IOException;
 import java.net.URI;

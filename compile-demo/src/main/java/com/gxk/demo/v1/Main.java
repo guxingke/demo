@@ -1,4 +1,4 @@
-package com.gxk.demo;
+package com.gxk.demo.v1;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -33,10 +33,10 @@ public class Main {
 
     final CharSequenceJavaFileObject test = new CharSequenceJavaFileObject("Test",
         "public class Test { public static void v(int x) { "
-            + "com.gxk.demo.Test.hello(2); "
+            + "com.gxk.demo.v1.Test.hello(2); "
             + "try{}finally{}; "
-            + "com.gxk.demo.Test2.hello(1); "
-            + "com.gxk.demo.Test.hello(java.lang.Math.abs(-12)); "
+            + "com.gxk.demo.v1.Test2.hello(1); "
+            + "com.gxk.demo.v1.Test.hello(java.lang.Math.abs(-12)); "
             + "} }");
     fileManager.addJavaFileObject(StandardLocation.SOURCE_PATH, "", "Test.java", test);
 

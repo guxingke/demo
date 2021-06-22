@@ -1,8 +1,9 @@
-package com.gxk.demo;
+package com.gxk.demo.v2;
 
 import com.sun.source.util.Trees;
 import java.util.Set;
 import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
@@ -10,6 +11,7 @@ import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import javax.tools.Diagnostic.Kind;
 
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @SupportedAnnotationTypes("*")
@@ -20,6 +22,7 @@ public class TestProcessor extends AbstractProcessor {
   private final TestScanner scanner;
   private Trees trees;
 
+  private Messager messager;
   public TestProcessor(TestScanner scanner) {
     this.scanner = scanner;
   }
@@ -28,6 +31,7 @@ public class TestProcessor extends AbstractProcessor {
   public synchronized void init(final ProcessingEnvironment processingEnvironment) {
     super.init(processingEnvironment);
     trees = Trees.instance(processingEnvironment);
+    messager = processingEnvironment.getMessager();
   }
 
   public boolean process(
@@ -40,9 +44,7 @@ public class TestProcessor extends AbstractProcessor {
         try {
           scanner.scan(trees.getPath(element), null);
         } catch (Exception e) {
-          System.err.println(e.getMessage());
-          ok = false;
-          return true;
+          messager.printMessage(Kind.ERROR, e.getMessage());
         }
       }
     }
